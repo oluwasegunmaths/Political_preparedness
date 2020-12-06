@@ -1,10 +1,10 @@
 package com.example.android.politicalpreparedness.election
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.android.politicalpreparedness.MainActivity.Companion.isInternetAvailable
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Division
@@ -28,19 +28,10 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
     private val _votingUrlString = MutableLiveData<String?>()
     val votingUrlString: LiveData<String?>
         get() = _votingUrlString
+    private val _toastMessage = MutableLiveData<String?>()
+    val toastMessage: LiveData<String?>
+        get() = _toastMessage
 
-    //TODO: Add live data to hold voter info
-
-    //TODO: Add var and methods to populate voter info
-
-    //TODO: Add var and methods to support loading URLs
-
-    //TODO: Add var and methods to save and remove elections to local database
-    //TODO: cont'd -- Populate initial state of save button to reflect proper action based on election saved status
-
-    /**
-     * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
-     */
     init {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -52,24 +43,16 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
 
     private fun queryAPI() {
         viewModelScope.launch {
-            Log.i("aaaaaaa", "1")
             // Get the Deferred object for our Retrofit request
-            var getPropertiesDeferred = CivicsApi.retrofitService.getVoterInfoAsync(division.state, electionId)
-            try {
-                Log.i("aaaaaaa", "2")
-
-                // this will run on a thread managed by Retrofit
-                _voterInfo.value = getPropertiesDeferred.await()
-//                if(listResult.elections.size==0){
-//                    Log.i("aaaaaaa","3")
-//
-//                }
-//                _allElections.value = listResult.elections
-            } catch (e: Exception) {
-                e.message?.let {
-                    Log.i("aaaaaaa", e.message!!)
-
+            if (isInternetAvailable()) {
+                val getPropertiesDeferred = CivicsApi.retrofitService.getVoterInfoAsync(division.state, electionId)
+                try {
+                    // this will run on a thread managed by Retrofit
+                    _voterInfo.value = getPropertiesDeferred.await()
+                } catch (e: Exception) {
                 }
+            } else {
+                _toastMessage.value = "No or poor network"
 
             }
         }
@@ -116,4 +99,7 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
         }
     }
 
+    fun shownToast() {
+        _toastMessage.value = null
+    }
 }

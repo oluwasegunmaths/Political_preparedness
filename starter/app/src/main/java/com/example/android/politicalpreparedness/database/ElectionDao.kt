@@ -10,23 +10,18 @@ import com.example.android.politicalpreparedness.network.models.Election
 @Dao
 interface ElectionDao {
 
-    //TODO: Add insert query
-    @Insert()
+    @Insert
     fun insert(election: Election)
 
-    //TODO: Add select all election query
     @Query("SELECT * FROM election_table")
-    fun getAllNights(): LiveData<List<Election>>
+    fun getAllElections(): LiveData<List<Election>>
 
-    //TODO: Add select single election query
     @Query("SELECT * from election_table WHERE id = :key")
     fun get(key: Int): Election?
 
-    //TODO: Add delete query
-    @Delete()
+    @Delete
     fun deleteElection(election: Election)
 
-    //TODO: Add clear query
     @Query("DELETE FROM election_table")
     fun clear()
 

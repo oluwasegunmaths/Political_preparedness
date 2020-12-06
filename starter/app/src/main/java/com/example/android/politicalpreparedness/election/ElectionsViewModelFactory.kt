@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.politicalpreparedness.database.ElectionDao
 
-//TODO: Create Factory to generate ElectionViewModel with provided election datasource
 class ElectionsViewModelFactory(
         private val dataSource: ElectionDao) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")

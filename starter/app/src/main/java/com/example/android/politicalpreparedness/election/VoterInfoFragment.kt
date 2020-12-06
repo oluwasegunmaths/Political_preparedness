@@ -6,9 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
@@ -21,20 +22,6 @@ class VoterInfoFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        //TODO: Add ViewModel values and create ViewModel
-
-        //TODO: Add binding values
-
-        //TODO: Populate voter info -- hide views without provided data.
-        /**
-        Hint: You will need to ensure proper data is provided from previous fragment.
-         */
-
-
-        //TODO: Handle loading of URLs
-
-        //TODO: Handle save button UI state
-        //TODO: cont'd Handle save button clicks
         binding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_voter_info, container, false)
         val dataSource = ElectionDatabase.getInstance(requireActivity().application).electionDao
@@ -45,7 +32,7 @@ class VoterInfoFragment : Fragment() {
         val viewModelFactory = VoterInfoViewModelFactory(dataSource, electionid, division)
 
         viewModel =
-                ViewModelProviders.of(
+                ViewModelProvider(
                         this, viewModelFactory).get(VoterInfoViewModel::class.java)
 
         binding.viewModel = viewModel
@@ -53,10 +40,10 @@ class VoterInfoFragment : Fragment() {
         binding.lifecycleOwner = this
         viewModel.election.observe(viewLifecycleOwner, {
             if (it == null) {
-                binding.button.text = "Follow"
+                binding.button.text = getString(R.string.follow)
 
             } else {
-                binding.button.text = "Unfollow"
+                binding.button.text = getString(R.string.unfollow)
 
             }
         })
@@ -75,9 +62,12 @@ class VoterInfoFragment : Fragment() {
                 viewModel.openedBallotInformation()
             }
         })
+        viewModel.toastMessage.observe(viewLifecycleOwner, {
+            it?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                viewModel.shownToast()
+            }
+        })
         return binding.root
     }
-
-    //TODO: Create method to load URL intents
-
 }

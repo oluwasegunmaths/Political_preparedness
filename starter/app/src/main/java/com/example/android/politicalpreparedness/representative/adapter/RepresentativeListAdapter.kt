@@ -1,10 +1,8 @@
 package com.example.android.politicalpreparedness.representative.adapter
 
-//import com.example.android.politicalpreparedness.databinding.ViewholderRepresentativeBinding
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +18,6 @@ import com.example.android.politicalpreparedness.representative.model.Representa
 class RepresentativeListAdapter: ListAdapter<Representative, RepresentativeViewHolder>(RepresentativeDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepresentativeViewHolder {
-        Log.i("bbbbbbbb", "1")
         return RepresentativeViewHolder.from(parent)
     }
 
@@ -36,8 +33,6 @@ class RepresentativeViewHolder(val binding: ViewholderRepresentativeBinding): Re
         binding.representative = item
         binding.representativePhoto.setImageResource(R.drawable.ic_profile)
 
-        //TODO: Show social links ** Hint: Use provided helper methods
-        //TODO: Show www link ** Hint: Use provided helper methods
         item.official.channels?.let {
             showSocialLinks(item.official.channels)
         }
@@ -55,7 +50,6 @@ class RepresentativeViewHolder(val binding: ViewholderRepresentativeBinding): Re
 
         }
     }
-    //TODO: Add companion object to inflate ViewHolder (from)
 
     private fun showSocialLinks(channels: List<Channel>) {
         val facebookUrl = getFacebookUrl(channels)
@@ -98,9 +92,6 @@ class RepresentativeViewHolder(val binding: ViewholderRepresentativeBinding): Re
 
 }
 
-//TODO: Create RepresentativeDiffCallback
-
-//TODO: Create RepresentativeListener
 class RepresentativeDiffCallback : DiffUtil.ItemCallback<Representative>() {
     override fun areItemsTheSame(oldItem: Representative, newItem: Representative): Boolean {
         return oldItem.official.name == newItem.official.name
@@ -112,7 +103,3 @@ class RepresentativeDiffCallback : DiffUtil.ItemCallback<Representative>() {
 
     }
 }
-
-//class RepresentativeListener(val clickListener: (id: Int,division: Division) -> Unit) {
-//    fun onClick(representative: Representative) = clickListener(election.id,election.division)
-//}
