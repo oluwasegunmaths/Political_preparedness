@@ -9,6 +9,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!-- TODO: Add necessary styles -->
+    <style name="wordStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+    </style>
 
+    <style name="buttonStyle">
+        <item name="android:background">@drawable/button_drawable</item>
+        <item name="android:textColor">#eecc68</item>
+    </style>
 </resources>
